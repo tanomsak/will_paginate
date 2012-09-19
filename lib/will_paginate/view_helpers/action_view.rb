@@ -128,11 +128,19 @@ module WillPaginate
       end
 
       def add_current_page_param(url_params, page)
-        unless param_name.index(/[^\w-]/)
-          url_params[param_name.to_sym] = page
-        else
-          page_param = parse_query_parameters("#{param_name}=#{page}")
-          symbolized_update(url_params, page_param)
+        unless page==1
+          unless param_name.index(/[^\w-]/)
+            url_params[param_name.to_sym] = page
+          else
+            page_param = parse_query_parameters("#{param_name}=#{page}")
+            symbolized_update(url_params, page_param)
+          end
+        else # remove page params form 1st page
+          unless param_name.index(/[^\w-]/)
+            url_params[param_name.to_sym] = nil
+          else
+            symbolized_update(url_params, {param_name.to_sym=>nil})
+          end        
         end
       end
 
